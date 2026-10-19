@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-34:/values-fa/values-fa.xml",
+            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-39:/values-fa/values-fa.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\3537eed4de0766c3d65a44e3227660e7\\transformed\\foundation\\res\\values-fa\\values-fa.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\2f5c86207a88e297b6a2382bf2025b7f\\transformed\\foundation\\res\\values-fa\\values-fa.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\078df492b513a0b0dca402f9b74cbf3d\\transformed\\core-1.19.0\\res\\values-fa\\values-fa.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\72960a9651ef046e6d39d394cffbed95\\transformed\\core-1.19.0\\res\\values-fa\\values-fa.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\1590d5ab5b122996da63b50c40e5f151\\transformed\\material3\\res\\values-fa\\values-fa.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\52b41e7a6e727e33ed8cc6353bfed80a\\transformed\\material3\\res\\values-fa\\values-fa.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\bc692838e0a3da41a12291220090ba28\\transformed\\ui\\res\\values-fa\\values-fa.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\ee7e1abcc016bda4a153f02ebd7a6d91\\transformed\\ui\\res\\values-fa\\values-fa.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

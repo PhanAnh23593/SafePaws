@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="send_otp" />
-                            <entry key="sourceFile" value="C:\Users\ngohu\Downloads\material-symbols--mobile-arrow-right-outline-rounded.svg" />
+                            <entry key="outputName" value="shield_check" />
+                            <entry key="sourceFile" value="C:\Users\ngohu\Downloads\energy-icons--shield-check-20.svg" />
                           </map>
                         </option>
                       </PersistentState>

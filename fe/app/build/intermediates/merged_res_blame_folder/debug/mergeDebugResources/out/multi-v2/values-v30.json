@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-34:/values-v30/values-v30.xml",
+            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-39:/values-v30/values-v30.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\1590d5ab5b122996da63b50c40e5f151\\transformed\\material3\\res\\values-v30\\values-v30.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\52b41e7a6e727e33ed8cc6353bfed80a\\transformed\\material3\\res\\values-v30\\values-v30.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

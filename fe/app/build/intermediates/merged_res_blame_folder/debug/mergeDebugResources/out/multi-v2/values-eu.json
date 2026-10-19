@@ -1,44 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-34:/values-eu/values-eu.xml",
+            "outputFile": "com.hanoipetadoption.app-mergeDebugResources-39:/values-eu/values-eu.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\3537eed4de0766c3d65a44e3227660e7\\transformed\\foundation\\res\\values-eu\\values-eu.xml",
-                    "from": {
-                        "startLines": "2,3,4",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,170,256",
-                        "endColumns": "114,85,88",
-                        "endOffsets": "165,251,340"
-                    },
-                    "to": {
-                        "startLines": "2,97,98",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "107,10239,10325",
-                        "endColumns": "114,85,88",
-                        "endOffsets": "217,10320,10409"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\078df492b513a0b0dca402f9b74cbf3d\\transformed\\core-1.19.0\\res\\values-eu\\values-eu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,153,256,356,459,564,667,786",
-                        "endColumns": "97,102,99,102,104,102,118,100",
-                        "endOffsets": "148,251,351,454,559,662,781,882"
-                    },
-                    "to": {
-                        "startLines": "4,5,6,7,8,9,10,93",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "329,427,530,630,733,838,941,9869",
-                        "endColumns": "97,102,99,102,104,102,118,100",
-                        "endOffsets": "422,525,625,728,833,936,1055,9965"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\1590d5ab5b122996da63b50c40e5f151\\transformed\\material3\\res\\values-eu\\values-eu.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\52b41e7a6e727e33ed8cc6353bfed80a\\transformed\\material3\\res\\values-eu\\values-eu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +21,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\bc692838e0a3da41a12291220090ba28\\transformed\\ui\\res\\values-eu\\values-eu.xml",
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\72960a9651ef046e6d39d394cffbed95\\transformed\\core-1.19.0\\res\\values-eu\\values-eu.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,153,256,356,459,564,667,786",
+                        "endColumns": "97,102,99,102,104,102,118,100",
+                        "endOffsets": "148,251,351,454,559,662,781,882"
+                    },
+                    "to": {
+                        "startLines": "4,5,6,7,8,9,10,93",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "329,427,530,630,733,838,941,9869",
+                        "endColumns": "97,102,99,102,104,102,118,100",
+                        "endOffsets": "422,525,625,728,833,936,1055,9965"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\ee7e1abcc016bda4a153f02ebd7a6d91\\transformed\\ui\\res\\values-eu\\values-eu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -69,6 +52,23 @@
                         "startOffsets": "222,1060,1151,1232,1333,1437,1529,1605,9122,9211,9295,9383,9473,9547,9632,9709,9791,9970,10047,10115",
                         "endColumns": "106,90,80,100,103,91,75,86,88,83,87,89,73,84,76,81,77,76,67,123",
                         "endOffsets": "324,1146,1227,1328,1432,1524,1600,1687,9206,9290,9378,9468,9542,9627,9704,9786,9864,10042,10110,10234"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ngohu\\.gradle\\caches\\9.5.0\\transforms\\2f5c86207a88e297b6a2382bf2025b7f\\transformed\\foundation\\res\\values-eu\\values-eu.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,170,256",
+                        "endColumns": "114,85,88",
+                        "endOffsets": "165,251,340"
+                    },
+                    "to": {
+                        "startLines": "2,97,98",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "107,10239,10325",
+                        "endColumns": "114,85,88",
+                        "endOffsets": "217,10320,10409"
                     }
                 }
             ]
