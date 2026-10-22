@@ -8,12 +8,14 @@ import androidx.navigation.compose.rememberNavController
 import com.hanoipetadoption.features.auth.ui.ForgotPasswordScreen
 import com.hanoipetadoption.features.auth.ui.LoginScreen
 import com.hanoipetadoption.features.auth.ui.ResetPasswordScreen
+import com.hanoipetadoption.features.auth.ui.SignUpScreen
 import com.hanoipetadoption.features.home.ui.HomeScreen
 import com.hanoipetadoption.features.splash.ui.SplashScreen
 
 object NavRoutes {
     const val SPLASH = "splash"
     const val LOGIN = "login"
+    const val SIGN_UP = "sign_up"
     const val FORGOT_PASSWORD = "forgot_password"
     const val RESET_PASSWORD = "reset_password"
     const val HOME = "home"
@@ -50,7 +52,7 @@ fun AppNavigation(
                     navController.navigate(NavRoutes.FORGOT_PASSWORD)
                 },
                 onNavigateToSignUp = {
-                    /* TODO: Điều hướng sang màn hình Đăng ký */
+                    navController.navigate(NavRoutes.SIGN_UP)
                 },
                 onLoginSuccess = {
                     navController.navigate(NavRoutes.HOME) {
@@ -60,7 +62,22 @@ fun AppNavigation(
             )
         }
 
-        // 3. Màn hình Quên mật khẩu
+        // 3. Màn hình Đăng ký tài khoản
+        composable(NavRoutes.SIGN_UP) {
+            SignUpScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onNavigateToLogin = {
+                    navController.popBackStack()
+                },
+                onNavigateToOtp = { _ ->
+                    navController.navigate(NavRoutes.FORGOT_PASSWORD)
+                }
+            )
+        }
+
+        // 4. Màn hình Quên mật khẩu
         composable(NavRoutes.FORGOT_PASSWORD) {
             ForgotPasswordScreen(
                 onBackClick = {
@@ -72,7 +89,7 @@ fun AppNavigation(
             )
         }
 
-        // 4. Màn hình Tạo mật khẩu mới
+        // 5. Màn hình Tạo mật khẩu mới
         composable(NavRoutes.RESET_PASSWORD) {
             ResetPasswordScreen(
                 onBackClick = {
@@ -86,7 +103,7 @@ fun AppNavigation(
             )
         }
 
-        // 5. Màn hình Trang chủ
+        // 6. Màn hình Trang chủ
         composable(NavRoutes.HOME) {
             HomeScreen(
                 onLogout = {

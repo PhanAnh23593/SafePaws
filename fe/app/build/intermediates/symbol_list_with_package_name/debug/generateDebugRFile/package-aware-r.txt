@@ -8,10 +8,14 @@ color teal_700
 color white
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable lock
 drawable login
 drawable paw_print
+drawable phone
+drawable profile
 drawable reset_password
 drawable send_otp
+drawable shield_check
 drawable timer
 drawable verify
 font plusjakartasans_bold

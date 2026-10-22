@@ -39,6 +39,9 @@ import com.hanoipetadoption.ui.theme.NeutralBackground
 import com.hanoipetadoption.ui.theme.PrimaryOrange
 import com.hanoipetadoption.ui.theme.SafePawsTheme
 
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.res.painterResource
+
 @Composable
 fun CustomTextField(
     value: String,
@@ -47,7 +50,10 @@ fun CustomTextField(
     placeholder: String,
     modifier: Modifier = Modifier,
     leadingIcon: ImageVector? = null,
+    @DrawableRes leadingIconRes: Int? = null,
     trailingIcon: ImageVector? = null,
+    @DrawableRes trailingIconRes: Int? = null,
+    trailingIconComposable: (@Composable () -> Unit)? = null,
     onTrailingIconClick: (() -> Unit)? = null,
     isPassword: Boolean = false,
     errorMessage: String? = null,
@@ -93,42 +99,75 @@ fun CustomTextField(
             } else {
                 VisualTransformation.None
             },
-            leadingIcon = if (leadingIcon != null) {
-                {
-                    Icon(
-                        imageVector = leadingIcon,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
-                }
-            } else null,
-            trailingIcon = {
-                if (isPassword) {
-                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                        val image = if (isPasswordVisible) {
-                            Icons.Filled.Visibility
-                        } else {
-                            Icons.Filled.VisibilityOff
-                        }
-
+            leadingIcon = when {
+                leadingIconRes != null -> {
+                    {
                         Icon(
-                            imageVector = image,
-                            contentDescription = if (isPasswordVisible) "Ẩn mật khẩu" else "Hiện mật khẩu",
-                            tint = Color.Gray
-                        )
-                    }
-                } else if (trailingIcon != null) {
-                    IconButton(
-                        onClick = { onTrailingIconClick?.invoke() },
-                        enabled = onTrailingIconClick != null
-                    ) {
-                        Icon(
-                            imageVector = trailingIcon,
+                            painter = painterResource(id = leadingIconRes),
                             contentDescription = null,
                             tint = Color.Gray
                         )
                     }
                 }
+                leadingIcon != null -> {
+                    {
+                        Icon(
+                            imageVector = leadingIcon,
+                            contentDescription = null,
+                            tint = Color.Gray
+                        )
+                    }
+                }
+                else -> null
+            },
+            trailingIcon = when {
+                trailingIconComposable != null -> trailingIconComposable
+                isPassword -> {
+                    {
+                        IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                            val image = if (isPasswordVisible) {
+                                Icons.Filled.Visibility
+                            } else {
+                                Icons.Filled.VisibilityOff
+                            }
+
+                            Icon(
+                                imageVector = image,
+                                contentDescription = if (isPasswordVisible) "Ẩn mật khẩu" else "Hiện mật khẩu",
+                                tint = Color.Gray
+                            )
+                        }
+                    }
+                }
+                trailingIconRes != null -> {
+                    {
+                        IconButton(
+                            onClick = { onTrailingIconClick?.invoke() },
+                            enabled = onTrailingIconClick != null
+                        ) {
+                            Icon(
+                                painter = painterResource(id = trailingIconRes),
+                                contentDescription = null,
+                                tint = Color.Unspecified
+                            )
+                        }
+                    }
+                }
+                trailingIcon != null -> {
+                    {
+                        IconButton(
+                            onClick = { onTrailingIconClick?.invoke() },
+                            enabled = onTrailingIconClick != null
+                        ) {
+                            Icon(
+                                imageVector = trailingIcon,
+                                contentDescription = null,
+                                tint = Color.Gray
+                            )
+                        }
+                    }
+                }
+                else -> null
             },
             shape = RoundedCornerShape(32.dp),
             colors = OutlinedTextFieldDefaults.colors(

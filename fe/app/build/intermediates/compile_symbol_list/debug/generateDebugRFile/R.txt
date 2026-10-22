@@ -7,10 +7,14 @@ int color teal_700 0x0
 int color white 0x0
 int drawable ic_launcher_background 0x0
 int drawable ic_launcher_foreground 0x0
+int drawable lock 0x0
 int drawable login 0x0
 int drawable paw_print 0x0
+int drawable phone 0x0
+int drawable profile 0x0
 int drawable reset_password 0x0
 int drawable send_otp 0x0
+int drawable shield_check 0x0
 int drawable timer 0x0
 int drawable verify 0x0
 int font plusjakartasans_bold 0x0
