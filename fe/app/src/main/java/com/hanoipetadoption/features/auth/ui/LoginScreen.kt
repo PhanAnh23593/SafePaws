@@ -75,7 +75,7 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
     onGoogleLoginClick: () -> Unit = {}
 ) {
-    var identifier by remember { mutableStateOf("taikhoan@gmail.com") }
+    var identifier by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(true) }
 
@@ -249,7 +249,7 @@ fun LoginScreen(
                             errorMessage = null
                         },
                         label = "Số điện thoại  hoặc Email",
-                        placeholder = "taikhoan@gmail.com",
+                        placeholder = "email@address.com",
                         leadingIcon = Icons.Default.Email,
                         errorMessage = identifierError,
                         keyboardOptions = KeyboardOptions(
@@ -270,7 +270,7 @@ fun LoginScreen(
                             errorMessage = null
                         },
                         label = "Mật khẩu",
-                        placeholder = "Nhập mật khẩu của bạn",
+                        placeholder = "••••••••••••",
                         leadingIcon = Icons.Default.Lock,
                         isPassword = true,
                         errorMessage = passwordError,

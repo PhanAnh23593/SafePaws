@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +41,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -80,9 +83,10 @@ fun ForgotPasswordScreen(
     onBackClick: () -> Unit,
     onNavigateToResetPassword: () -> Unit
 ) {
-    var email by remember { mutableStateOf("hanoipetrescue@gmail.com") }
+    var email by remember { mutableStateOf("") }
     var otpCode by remember { mutableStateOf("") }
     var isOtpSent by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     // State kiểm tra đúng/sai mã OTP và API loading
     var isOtpError by remember { mutableStateOf(false) }
@@ -272,12 +276,55 @@ fun ForgotPasswordScreen(
                         Column {
                             CustomTextField(
                                 value = email,
-                                onValueChange = { email = it },
+                                onValueChange = {
+                                    email = it
+                                    errorMessage = null
+                                },
                                 label = "Email",
                                 placeholder = "Nhập email",
                                 leadingIcon = Icons.Default.Email,
                                 background = Color(0xFFF5F3F0)
                             )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Banner thông báo lỗi nếu có
+                            AnimatedVisibility(
+                                visible = errorMessage != null,
+                                enter = fadeIn() + expandVertically(),
+                                exit = fadeOut() + shrinkVertically()
+                            ) {
+                                errorMessage?.let { msg ->
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Surface(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        shape = RoundedCornerShape(12.dp),
+                                        color = Color(0xFFFFDAD6),
+                                        border = BorderStroke(1.dp, Color(0xFFFFB4AB))
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.ErrorOutline,
+                                                contentDescription = null,
+                                                tint = Color(0xFFBA1A1A),
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                text = msg,
+                                                style = MaterialTheme.typography.bodyMedium.copy(
+                                                    color = Color(0xFF93000A),
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    fontSize = 13.sp
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            }
 
                             Spacer(modifier = Modifier.height(16.dp))
 
@@ -293,6 +340,16 @@ fun ForgotPasswordScreen(
                                 contentColor = if (isOtpSent) DarkBrownText else Color.White,
                                 shadowColor = if (isOtpSent) Color.Transparent else PrimaryOrange,
                                 onClick = {
+                                    errorMessage = null
+                                    if (email.isBlank()) {
+                                        errorMessage = "Vui lòng nhập địa chỉ email"
+                                        return@PrimaryButton
+                                    }
+                                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                        errorMessage = "Địa chỉ email không hợp lệ (VD: name@example.com)"
+                                        return@PrimaryButton
+                                    }
+
                                     isOtpSent = true
                                     isTimerRunning = true
                                     coroutineScope.launch {
