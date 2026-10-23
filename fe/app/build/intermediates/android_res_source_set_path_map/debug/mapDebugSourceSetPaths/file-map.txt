@@ -1,0 +1,8 @@
+com.hanoipetadoption.app-pngs-0 E:\Study\TTCSN\SafePaws\fe\app\build\generated\res\pngs\debug
+com.hanoipetadoption.app-updated_navigation_xml-1 E:\Study\TTCSN\SafePaws\fe\app\build\generated\updated_navigation_xml\debug
+com.hanoipetadoption.app-packageDebugResources-2 E:\Study\TTCSN\SafePaws\fe\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.hanoipetadoption.app-packageDebugResources-3 E:\Study\TTCSN\SafePaws\fe\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.hanoipetadoption.app-debug-4 E:\Study\TTCSN\SafePaws\fe\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.hanoipetadoption.app-debug-5 E:\Study\TTCSN\SafePaws\fe\app\src\debug\res
+com.hanoipetadoption.app-main-6 E:\Study\TTCSN\SafePaws\fe\app\src\main\res
+gradleHome-0 C:\Users\ngohu\.gradle

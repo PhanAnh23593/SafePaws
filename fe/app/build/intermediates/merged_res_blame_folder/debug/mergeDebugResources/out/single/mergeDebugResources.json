@@ -1,0 +1,134 @@
+[
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_paw_print.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\paw_print.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\font_plusjakartasans_regular.ttf.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\font\\plusjakartasans_regular.ttf"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.hanoipetadoption.app-debug-41:/drawable_email.xml.flat",
+        "source": "com.hanoipetadoption.app-main-43:/drawable/email.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\font_plusjakartasans_semibold.ttf.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\font\\plusjakartasans_semibold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_phone.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\phone.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_send_otp.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\send_otp.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_timer.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\timer.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_reset_password.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\reset_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_lock.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\lock.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_verify.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\verify.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\font_plusjakartasans_medium.ttf.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\font\\plusjakartasans_medium.ttf"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\font_plusjakartasans_bold.ttf.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\font\\plusjakartasans_bold.ttf"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\font_plusjakartasans_italic.ttf.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\font\\plusjakartasans_italic.ttf"
+    },
+    {
+        "merged": "com.hanoipetadoption.app-debug-41:/drawable_birthday.xml.flat",
+        "source": "com.hanoipetadoption.app-main-43:/drawable/birthday.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_profile.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_shield_check.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\shield_check.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\drawable_login.xml.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\drawable\\login.xml"
+    },
+    {
+        "merged": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-debug-41:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\ngohu\\.gradle\\daemon\\9.5.0\\com.hanoipetadoption.app-main-43:\\mipmap-hdpi\\ic_launcher_round.webp"
+    }
+]
