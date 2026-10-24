@@ -39,11 +39,11 @@ public class SmtpMailService implements MailService {
         boolean registration = purpose == OtpService.Purpose.REGISTER;
         String title = registration ? "Xác minh tài khoản" : "Đặt lại mật khẩu";
         String description = registration
-            ? "Dùng mã bên dưới để hoàn tất đăng ký tài khoản Zippy của bạn."
-            : "Dùng mã bên dưới để xác minh yêu cầu đặt lại mật khẩu Zippy của bạn.";
+            ? "Dùng mã bên dưới để hoàn tất đăng ký tài khoản SafePaws của bạn."
+            : "Dùng mã bên dưới để xác minh yêu cầu đặt lại mật khẩu SafePaws của bạn.";
         String plainText = title + "\n\n" + description + "\n\nMã xác minh: " + otp
             + "\nMã có hiệu lực trong 3 phút. Không chia sẻ mã này với bất kỳ ai."
-            + "\nNếu bạn không thực hiện yêu cầu này, hãy bỏ qua email.\n\nZippy";
+            + "\nNếu bạn không thực hiện yêu cầu này, hãy bỏ qua email.\n\nSafePaws";
         String html = otpTemplate.replace("{{title}}", HtmlUtils.htmlEscape(title))
             .replace("{{description}}", HtmlUtils.htmlEscape(description))
             .replace("{{otp}}", HtmlUtils.htmlEscape(otp));
@@ -52,7 +52,7 @@ public class SmtpMailService implements MailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
             helper.setFrom(from);
             helper.setTo(email);
-            helper.setSubject("Zippy – " + title);
+            helper.setSubject("SafePaws – " + title);
             helper.setText(plainText, html);
             mailSender.send(message);
         } catch (MailException | MessagingException ex) {

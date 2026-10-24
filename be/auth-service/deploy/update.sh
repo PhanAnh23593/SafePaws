@@ -18,11 +18,11 @@ fi
 umask 077
 mkdir -p backups
 backup="backups/auth-$(date -u +%Y%m%dT%H%M%SZ).dump"
-"${compose[@]}" exec -T postgres pg_dump -U zippy_auth -d auth_db -Fc > "$backup"
+"${compose[@]}" exec -T postgres pg_dump -U safepaws_auth -d auth_db -Fc > "$backup"
 test -s "$backup"
 # V2 and V3 are repeatable. Initialization of a new volume is handled by V1.
 for migration in V2__auth_security.sql V3__token_sessions.sql; do
-  "${compose[@]}" exec -T postgres psql -U zippy_auth -d auth_db -v ON_ERROR_STOP=1 \
+  "${compose[@]}" exec -T postgres psql -U safepaws_auth -d auth_db -v ON_ERROR_STOP=1 \
     < "src/main/resources/db/schema/$migration"
 done
 "${compose[@]}" up -d --no-build

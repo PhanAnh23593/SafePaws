@@ -25,7 +25,7 @@ class JwtServiceTest {
     private final Instant now = Instant.parse("2026-10-02T00:00:00Z");
     private final UUID userId = UUID.randomUUID();
     private final JwtService jwt = new JwtService(new AuthProperties(
-        Base64.getEncoder().encodeToString(key), "zippy-auth", 900, 3600, List.of()),
+        Base64.getEncoder().encodeToString(key), "safepaws-auth", 900, 3600, List.of()),
         Clock.fixed(now, ZoneOffset.UTC));
 
     private String signed(byte[] secret, String issuer, String audience, String subject, Instant expiry) throws Exception {
@@ -38,25 +38,25 @@ class JwtServiceTest {
     }
 
     @Test void acceptsValidInternalToken() throws Exception {
-        assertThat(jwt.subject(signed(key, "zippy-auth", "zippy-api", userId.toString(), now.plusSeconds(60))))
+        assertThat(jwt.subject(signed(key, "safepaws-auth", "safepaws-api", userId.toString(), now.plusSeconds(60))))
             .isEqualTo(userId);
     }
 
     @Test void rejectsWrongSignatureIssuerAudienceExpiredOrMissingClaims() throws Exception {
         byte[] otherKey = new byte[32]; otherKey[0] = 1;
         for (String token : List.of(
-                signed(otherKey, "zippy-auth", "zippy-api", userId.toString(), now.plusSeconds(60)),
-                signed(key, "other-issuer", "zippy-api", userId.toString(), now.plusSeconds(60)),
-                signed(key, "zippy-auth", "other-api", userId.toString(), now.plusSeconds(60)),
-                signed(key, "zippy-auth", "zippy-api", userId.toString(), now.minusSeconds(1)),
-                signed(key, "zippy-auth", "zippy-api", userId.toString(), null),
-                signed(key, "zippy-auth", "zippy-api", null, now.plusSeconds(60)))) {
+                signed(otherKey, "safepaws-auth", "safepaws-api", userId.toString(), now.plusSeconds(60)),
+                signed(key, "other-issuer", "safepaws-api", userId.toString(), now.plusSeconds(60)),
+                signed(key, "safepaws-auth", "other-api", userId.toString(), now.plusSeconds(60)),
+                signed(key, "safepaws-auth", "safepaws-api", userId.toString(), now.minusSeconds(1)),
+                signed(key, "safepaws-auth", "safepaws-api", userId.toString(), null),
+                signed(key, "safepaws-auth", "safepaws-api", null, now.plusSeconds(60)))) {
             assertThatThrownBy(() -> jwt.subject(token)).isInstanceOf(JwtException.class);
         }
     }
 
     @Test void rejectsNonUuidSubject() throws Exception {
-        String token = signed(key, "zippy-auth", "zippy-api", "not-a-user-id", now.plusSeconds(60));
+        String token = signed(key, "safepaws-auth", "safepaws-api", "not-a-user-id", now.plusSeconds(60));
         assertThatThrownBy(() -> jwt.subject(token)).isInstanceOf(IllegalArgumentException.class);
     }
 
