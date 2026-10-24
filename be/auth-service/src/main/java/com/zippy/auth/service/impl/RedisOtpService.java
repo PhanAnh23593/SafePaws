@@ -17,6 +17,7 @@ import java.util.*;
 
 @Service
 public class RedisOtpService implements OtpService {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RedisOtpService.class);
     public static final Duration OTP_TTL = Duration.ofMinutes(3);
     public static final Duration COOLDOWN = Duration.ofSeconds(60);
     public static final Duration FLOW_TTL = Duration.ofMinutes(15);
@@ -90,7 +91,15 @@ public class RedisOtpService implements OtpService {
         String code;
         do { code = String.format(Locale.ROOT, "%06d", random.nextInt(1_000_000)); }
         while (digest(token, code).equals(sending.otpHash()));
-        mail.sendOtp(sending.registration().email(), code, sending.purpose());
+        boolean reset = sending.purpose() == Purpose.RESET_PASSWORD;
+        if (!reset || sending.registration().encodedPassword() != null) {
+            try { mail.sendOtp(sending.registration().email(), code, sending.purpose()); }
+            catch (AppException ex) {
+                // A provider outage must not turn recovery into an account-existence oracle.
+                if (!reset || ex.getErrorCode() != ErrorCode.AUTH_MAIL_UNAVAILABLE) throw ex;
+                log.warn("Password recovery email could not be delivered");
+            }
+        }
         Flow pending = new Flow(sending.purpose(), sending.registration(), digest(token, code),
             clock.millis() + OTP_TTL.toMillis(), "PENDING", sending.operation());
         if (!replace(key(token), staged, json(pending), FLOW_TTL))
@@ -140,6 +149,8 @@ public class RedisOtpService implements OtpService {
         // Each delivered code gets at most five attempts, including concurrent requests.
         // Keep the counter through rollback; only a newly delivered OTP resets the budget.
         rateLimiter.check("otp", token + ":" + flow.operation(), 5, FLOW_TTL);
+        if (purpose == Purpose.RESET_PASSWORD && flow.registration().encodedPassword() == null)
+            throw new AppException(ErrorCode.AUTH_INVALID_OTP);
         if (code == null || !MessageDigest.isEqual(flow.otpHash().getBytes(StandardCharsets.US_ASCII),
                 digest(token, code).getBytes(StandardCharsets.US_ASCII)))
             throw new AppException(ErrorCode.AUTH_INVALID_OTP);

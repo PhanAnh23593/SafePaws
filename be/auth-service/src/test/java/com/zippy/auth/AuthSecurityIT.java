@@ -162,6 +162,34 @@ class AuthSecurityIT {
         assertThat(redis.getExpire(keys.iterator().next())).isBetween(1L, 900L);
     }
 
+    @Test void recoveryResponsesDoNotExposeWhetherEmailExists() {
+        seed("known@example.invalid");
+        var known = post("forgot-password", Map.of("email", "known@example.invalid"), null);
+        var missing = post("forgot-password", Map.of("email", "missing@example.invalid"), null);
+        assertThat(known.getStatusCode().value()).isEqualTo(200);
+        assertThat(missing.getStatusCode()).isEqualTo(known.getStatusCode());
+        assertThat(missing.getBody()).isEqualTo(known.getBody());
+        String flow = missing.getHeaders().getFirst("X-Auth-Flow");
+        assertThat(flow).matches("[A-Za-z0-9_-]{43}");
+        verify(mail, never()).sendOtp(eq("missing@example.invalid"), anyString(), any());
+        assertThat(post("forgot-password", Map.of("email", "missing@example.invalid"), null).getStatusCode().value()).isEqualTo(429);
+        assertThat(post("forgot-password/verify-otp", Map.of("otp", "123456"), flow).getStatusCode().value()).isEqualTo(400);
+        assertThat(post("reset-password", resetBody(), flow).getStatusCode().value()).isEqualTo(400);
+        expireCooldowns();
+        assertThat(post("forgot-password/resend-otp", Map.of(), flow).getStatusCode().value()).isEqualTo(200);
+        verify(mail, never()).sendOtp(eq("missing@example.invalid"), anyString(), any());
+    }
+
+    @Test void recoveryMailOutageDoesNotRevealRegisteredAccount() {
+        seed("outage@example.invalid");
+        doThrow(new com.zippy.auth.exception.AppException(com.zippy.auth.exception.ErrorCode.AUTH_MAIL_UNAVAILABLE))
+            .when(mail).sendOtp(eq("outage@example.invalid"), anyString(), any());
+        var known = post("forgot-password", Map.of("email", "outage@example.invalid"), null);
+        var missing = post("forgot-password", Map.of("email", "missing@example.invalid"), null);
+        assertThat(known.getStatusCode().value()).isEqualTo(200);
+        assertThat(known.getBody()).isEqualTo(missing.getBody());
+    }
+
     @Test void resetRequiresOwnVerifiedFlowAndRevokesOldSessions() {
         seed("victim@example.invalid"); seed("other@example.invalid");
         JsonNode oldTokens = login("victim@example.invalid", PASSWORD);

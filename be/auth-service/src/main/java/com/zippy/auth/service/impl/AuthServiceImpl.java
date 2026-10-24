@@ -78,9 +78,11 @@ public class AuthServiceImpl implements AuthService {
     @Override @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public String forgotPassword(ForgotPasswordRequest request) {
         String email = normalize(request.email());
-        User user = users.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.AUTH_EMAIL_NOT_FOUND));
+        rateLimiter.check("recovery", email, 5, java.time.Duration.ofMinutes(15));
+        var user = users.findByEmail(email);
+        // Unknown accounts receive an indistinguishable flow, but never receive mail.
         return otp.start(OtpService.Purpose.RESET_PASSWORD,
-            new OtpService.Registration(email, null, null, user.getPassword()));
+            new OtpService.Registration(email, null, null, user.map(User::getPassword).orElse(null)));
     }
 
     @Override @Transactional(propagation = Propagation.NOT_SUPPORTED)

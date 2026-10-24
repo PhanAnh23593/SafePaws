@@ -46,7 +46,7 @@ public class AuthController {
     public ApiResponse<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request, jakarta.servlet.http.HttpServletResponse response) {
         response.setHeader("X-Auth-Flow", auth.forgotPassword(request));
         response.setHeader("Cache-Control", "no-store");
-        return ApiResponse.ok("Đã gửi mã OTP", null);
+        return ApiResponse.ok("Nếu email đã được đăng ký, bạn sẽ nhận được mã xác thực", null);
     }
     @PostMapping(UrlConstants.FORGOT_PASSWORD_VERIFY_OTP)
     public ApiResponse<Void> verifyForgotPassword(@Valid @RequestBody OtpRequest request,
@@ -55,7 +55,7 @@ public class AuthController {
     }
     @PostMapping(UrlConstants.FORGOT_PASSWORD_RESEND_OTP)
     public ApiResponse<Void> resendForgotPasswordOtp(@RequestHeader(value = "X-Auth-Flow", required = false) String flow) {
-        auth.resendForgotPasswordOtp(flow); return ApiResponse.ok("Đã gửi mã OTP", null);
+        auth.resendForgotPasswordOtp(flow); return ApiResponse.ok("Nếu email đã được đăng ký, bạn sẽ nhận được mã xác thực", null);
     }
     @PostMapping(UrlConstants.RESET_PASSWORD)
     public ApiResponse<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request,

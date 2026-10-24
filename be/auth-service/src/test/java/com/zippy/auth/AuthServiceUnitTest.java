@@ -28,13 +28,24 @@ class AuthServiceUnitTest {
     private final JwtService jwt = mock(JwtService.class);
     private final GoogleIdentityVerifier google = mock(GoogleIdentityVerifier.class);
     private final com.zippy.auth.security.AuthRateLimiter rateLimiter = mock(com.zippy.auth.security.AuthRateLimiter.class);
+    private final com.zippy.auth.service.OtpService otp = mock(com.zippy.auth.service.OtpService.class);
     private AuthServiceImpl auth;
 
     @BeforeEach void setup() {
         when(passwords.encode(anyString())).thenReturn("dummy-hash");
         auth = new AuthServiceImpl(users, mock(com.zippy.auth.repository.RoleRepository.class), passwords, tokens, jwt,
             new AuthProperties("unused", "test", 900, 3600, List.of()), google,
-            mock(com.zippy.auth.service.OtpService.class), mock(com.zippy.auth.security.TokenBlacklist.class), rateLimiter);
+            otp, mock(com.zippy.auth.security.TokenBlacklist.class), rateLimiter);
+    }
+
+    @Test void recoveryForUnknownEmailStartsDecoyFlowWithoutRevealingAccountExistence() {
+        when(otp.start(any(), any())).thenReturn("opaque-flow");
+        assertThat(auth.forgotPassword(new com.zippy.auth.domain.dto.request.ForgotPasswordRequest("MISSING@EXAMPLE.COM")))
+            .isEqualTo("opaque-flow");
+        verify(otp).start(com.zippy.auth.service.OtpService.Purpose.RESET_PASSWORD,
+            new com.zippy.auth.service.OtpService.Registration("missing@example.com", null, null, null));
+        verify(rateLimiter).check(eq("recovery"), eq("missing@example.com"), eq(5), any());
+        verifyNoInteractions(tokens, jwt);
     }
 
     @Test void rateLimitedLoginNeverChecksPasswordOrIssuesTokens() {
