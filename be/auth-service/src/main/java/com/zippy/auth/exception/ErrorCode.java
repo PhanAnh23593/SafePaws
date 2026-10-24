@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 @Getter @RequiredArgsConstructor
 public enum ErrorCode {
+    AUTH_RATE_LIMITED(HttpStatus.TOO_MANY_REQUESTS, "Too many authentication attempts; try again later"),
     AUTH_FLOW_INVALID(HttpStatus.BAD_REQUEST, "Phiên xác thực không hợp lệ hoặc đã hết hạn, vui lòng thực hiện lại"),
     AUTH_MAIL_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "Không thể gửi email lúc này, vui lòng thử lại"),
     AUTH_DEPENDENCY_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "Dịch vụ xác thực tạm thời không khả dụng"),

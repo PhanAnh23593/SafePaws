@@ -27,15 +27,17 @@ public class AuthServiceImpl implements AuthService {
     private final TokenBlacklist blacklist;
     private final AuthProperties properties;
     private final GoogleIdentityVerifier google;
+    private final AuthRateLimiter rateLimiter;
     private final String dummyHash;
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AuthServiceImpl.class);
 
     public AuthServiceImpl(UserRepository users, RoleRepository roles, PasswordEncoder passwords,
             TokenService tokens, JwtService jwt, AuthProperties properties,
-            GoogleIdentityVerifier google, OtpService otp, TokenBlacklist blacklist) {
+            GoogleIdentityVerifier google, OtpService otp, TokenBlacklist blacklist, AuthRateLimiter rateLimiter) {
         this.users = users; this.roles = roles; this.passwords = passwords; this.tokens = tokens;
         this.jwt = jwt; this.properties = properties; this.google = google;
         this.otp = otp; this.blacklist = blacklist;
+        this.rateLimiter = rateLimiter;
         this.dummyHash = passwords.encode(UUID.randomUUID().toString());
     }
 
@@ -49,7 +51,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override public AuthResponse login(LoginRequest request) {
-        var user = users.findByEmail(normalize(request.email()));
+        String email = normalize(request.email());
+        rateLimiter.check("login", email, 10, java.time.Duration.ofMinutes(15));
+        var user = users.findByEmail(email);
         boolean matches = passwords.matches(request.password(), user.map(User::getPassword).orElse(dummyHash));
         if (!matches || user.isEmpty()) throw new BadCredentialsException("Invalid credentials");
         return response(tokens.issue(user.get()));

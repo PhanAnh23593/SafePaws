@@ -27,13 +27,23 @@ class AuthServiceUnitTest {
     private final TokenService tokens = mock(TokenService.class);
     private final JwtService jwt = mock(JwtService.class);
     private final GoogleIdentityVerifier google = mock(GoogleIdentityVerifier.class);
+    private final com.zippy.auth.security.AuthRateLimiter rateLimiter = mock(com.zippy.auth.security.AuthRateLimiter.class);
     private AuthServiceImpl auth;
 
     @BeforeEach void setup() {
         when(passwords.encode(anyString())).thenReturn("dummy-hash");
         auth = new AuthServiceImpl(users, mock(com.zippy.auth.repository.RoleRepository.class), passwords, tokens, jwt,
             new AuthProperties("unused", "test", 900, 3600, List.of()), google,
-            mock(com.zippy.auth.service.OtpService.class), mock(com.zippy.auth.security.TokenBlacklist.class));
+            mock(com.zippy.auth.service.OtpService.class), mock(com.zippy.auth.security.TokenBlacklist.class), rateLimiter);
+    }
+
+    @Test void rateLimitedLoginNeverChecksPasswordOrIssuesTokens() {
+        doThrow(new AppException(ErrorCode.AUTH_RATE_LIMITED)).when(rateLimiter)
+            .check(eq("login"), eq("test@gmail.com"), eq(10), any());
+        assertThatThrownBy(() -> auth.login(new LoginRequest(" TEST@GMAIL.COM ", "Secret!123")))
+            .isInstanceOfSatisfying(AppException.class, ex -> assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.AUTH_RATE_LIMITED));
+        verifyNoInteractions(users, tokens, jwt);
+        verify(passwords, never()).matches(any(), any());
     }
 
     @Test void loginNormalizesEmailButPreservesPassword() {

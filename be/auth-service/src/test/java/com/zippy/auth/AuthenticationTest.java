@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(AuthenticationTest.Probes.class)
 @org.springframework.test.context.ActiveProfiles("test")
 class AuthenticationTest {
+    @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.AuthRateLimiter rateLimiter;
     @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.service.OtpService otp;
     @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.TokenBlacklist blacklist;
     private final Set<String> revokedAccess = new HashSet<>();

@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 @org.springframework.test.context.ActiveProfiles("test")
 class BaseSmokeTest {
+    @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.AuthRateLimiter rateLimiter;
     @Autowired TestRestTemplate http;
     @Autowired UserRepository users;
     @Autowired RoleRepository roles;

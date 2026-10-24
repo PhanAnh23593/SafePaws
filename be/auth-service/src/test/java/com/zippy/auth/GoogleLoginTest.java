@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 })
 @org.springframework.test.context.ActiveProfiles("test")
 class GoogleLoginTest {
+    @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.AuthRateLimiter rateLimiter;
     @MockitoBean com.zippy.auth.service.OtpService otp;
     @MockitoBean com.zippy.auth.security.TokenBlacklist blacklist;
     @Autowired TestRestTemplate http;

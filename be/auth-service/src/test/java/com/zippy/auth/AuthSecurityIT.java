@@ -59,6 +59,7 @@ class AuthSecurityIT {
     @Autowired StringRedisTemplate redis;
     @Autowired ObjectMapper mapper;
     @Autowired com.zippy.auth.security.TokenBlacklist blacklist;
+    @Autowired com.zippy.auth.security.AuthRateLimiter rateLimiter;
     @MockitoBean MailService mail;
     @MockitoBean Clock clock;
     private final Map<String, String> codes = new ConcurrentHashMap<>();
@@ -125,6 +126,40 @@ class AuthSecurityIT {
         assertThat(post("register/verify-otp", Map.of("otp", codes.get(email)), flow).getStatusCode().value()).isEqualTo(400);
         assertThat(post("register", registration(email), null).getStatusCode().value()).isEqualTo(409);
         login(email, PASSWORD);
+    }
+
+    @Test void otpBudgetSurvivesWrongAttemptsAndResendCreatesNewBudget() {
+        String email = "limited@example.invalid", flow = startRegister(email);
+        String wrong = codes.get(email).equals("000000") ? "111111" : "000000";
+        for (int i = 0; i < 5; i++)
+            assertThat(post("register/verify-otp", Map.of("otp", wrong), flow).getStatusCode().value()).isEqualTo(400);
+        assertThat(post("register/verify-otp", Map.of("otp", codes.get(email)), flow).getStatusCode().value()).isEqualTo(429);
+        assertThat(users.count()).isZero();
+        expireCooldowns();
+        assertThat(post("register/resend-otp", Map.of(), flow).getStatusCode().value()).isEqualTo(200);
+        assertThat(post("register/verify-otp", Map.of("otp", codes.get(email)), flow).getStatusCode().value()).isEqualTo(200);
+    }
+
+    @Test void concurrentRequestsCannotExceedSharedRateBudget() throws Exception {
+        var start = new CountDownLatch(1);
+        try (var pool = Executors.newFixedThreadPool(12)) {
+            var tasks = new ArrayList<Future<Boolean>>();
+            for (int i = 0; i < 12; i++) tasks.add(pool.submit(() -> {
+                start.await();
+                try { rateLimiter.check("test", "same-account", 5, Duration.ofMinutes(15)); return true; }
+                catch (com.zippy.auth.exception.AppException ex) {
+                    assertThat(ex.getErrorCode()).isEqualTo(com.zippy.auth.exception.ErrorCode.AUTH_RATE_LIMITED);
+                    return false;
+                }
+            }));
+            start.countDown();
+            int accepted = 0;
+            for (var task : tasks) if (task.get(20, TimeUnit.SECONDS)) accepted++;
+            assertThat(accepted).isEqualTo(5);
+        }
+        var keys = redis.keys("auth:limit:test:*");
+        assertThat(keys).hasSize(1);
+        assertThat(redis.getExpire(keys.iterator().next())).isBetween(1L, 900L);
     }
 
     @Test void resetRequiresOwnVerifiedFlowAndRevokesOldSessions() {

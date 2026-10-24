@@ -31,12 +31,14 @@ public class RedisOtpService implements OtpService {
     private final ObjectMapper mapper;
     private final MailService mail;
     private final Clock clock;
+    private final com.zippy.auth.security.AuthRateLimiter rateLimiter;
     private final byte[] secret;
     private final SecureRandom random = new SecureRandom();
 
     public RedisOtpService(StringRedisTemplate redis, ObjectMapper mapper, MailService mail,
-            Clock clock, AuthProperties properties) {
+            Clock clock, AuthProperties properties, com.zippy.auth.security.AuthRateLimiter rateLimiter) {
         this.redis = redis; this.mapper = mapper; this.mail = mail; this.clock = clock;
+        this.rateLimiter = rateLimiter;
         this.secret = Base64.getDecoder().decode(properties.jwtSecretBase64());
     }
 
@@ -135,6 +137,9 @@ public class RedisOtpService implements OtpService {
         Flow flow = parse(raw);
         requireStatus(flow, "PENDING");
         if (clock.millis() >= flow.expiresAt()) throw new AppException(ErrorCode.AUTH_OTP_EXPIRED);
+        // Each delivered code gets at most five attempts, including concurrent requests.
+        // Keep the counter through rollback; only a newly delivered OTP resets the budget.
+        rateLimiter.check("otp", token + ":" + flow.operation(), 5, FLOW_TTL);
         if (code == null || !MessageDigest.isEqual(flow.otpHash().getBytes(StandardCharsets.US_ASCII),
                 digest(token, code).getBytes(StandardCharsets.US_ASCII)))
             throw new AppException(ErrorCode.AUTH_INVALID_OTP);
