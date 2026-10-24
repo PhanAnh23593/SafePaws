@@ -1,0 +1,8 @@
+target
+.tools
+.m2
+.git
+.env
+.env.*
+*.log
+backups

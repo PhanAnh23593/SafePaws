@@ -1,0 +1,13 @@
+target/
+.tools/
+.m2/
+.idea/
+*.iml
+.env
+.env.*
+!.env.example
+!.env.aws.example
+*.log
+backups/
+.DS_Store
+Thumbs.db
