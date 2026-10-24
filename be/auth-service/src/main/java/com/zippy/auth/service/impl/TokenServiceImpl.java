@@ -41,14 +41,18 @@ public class TokenServiceImpl implements TokenService {
         tokens.save(token);
         return new IssuedRefreshToken(raw, user, sessionId);
     }
-    @Override public IssuedRefreshToken rotate(String rawToken) {
+    @Override @Transactional(noRollbackFor = RefreshTokenReuseException.class)
+    public IssuedRefreshToken rotate(String rawToken) {
         validate(rawToken);
         UUID userId = tokens.findUserIdByHash(hash(rawToken))
             .orElseThrow(() -> new AppException(ErrorCode.AUTH_INVALID_REFRESH_TOKEN));
         User user = users.findLockedById(userId).orElseThrow(() -> new AppException(ErrorCode.AUTH_UNAUTHORIZED));
         RefreshToken token = tokens.findLockedByHash(hash(rawToken))
             .orElseThrow(() -> new AppException(ErrorCode.AUTH_INVALID_REFRESH_TOKEN));
-        if (token.isRevoked()) throw new AppException(ErrorCode.AUTH_REVOKED_REFRESH_TOKEN);
+        if (token.isRevoked()) {
+            revokeSession(userId, token.getSessionId());
+            throw new RefreshTokenReuseException();
+        }
         if (!token.getExpiresAt().isAfter(clock.instant()))
             throw new AppException(ErrorCode.AUTH_EXPIRED_REFRESH_TOKEN);
         if (blacklist.isRefreshRevoked(token.getTokenHash()) || blacklist.isSessionRevoked(token.getSessionId()))

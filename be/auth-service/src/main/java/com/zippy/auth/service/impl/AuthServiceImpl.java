@@ -124,7 +124,8 @@ public class AuthServiceImpl implements AuthService {
         User user = users.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.AUTH_GOOGLE_ACCOUNT_UNAVAILABLE));
         return response(tokens.issue(user));
     }
-    @Override public AuthResponse refresh(String rawToken) { return response(tokens.rotate(rawToken)); }
+    @Override @Transactional(noRollbackFor = RefreshTokenReuseException.class)
+    public AuthResponse refresh(String rawToken) { return response(tokens.rotate(rawToken)); }
 
     @Override public void logout(String accessToken) {
         if (accessToken == null) throw new AppException(ErrorCode.AUTH_UNAUTHORIZED);

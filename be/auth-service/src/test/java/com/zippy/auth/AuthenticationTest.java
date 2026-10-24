@@ -33,7 +33,8 @@ class AuthenticationTest {
     @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.AuthRateLimiter rateLimiter;
     @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.service.OtpService otp;
     @org.springframework.test.context.bean.override.mockito.MockitoBean com.zippy.auth.security.TokenBlacklist blacklist;
-    private final Set<String> revokedAccess = new HashSet<>();
+    private final Set<String> revokedAccess = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private final Set<UUID> revokedSessions = java.util.concurrent.ConcurrentHashMap.newKeySet();
     @Autowired TestRestTemplate http;
     @Autowired UserRepository users;
     @Autowired RefreshTokenRepository tokens;
@@ -42,6 +43,11 @@ class AuthenticationTest {
 
     @BeforeEach void seed() {
         revokedAccess.clear();
+        revokedSessions.clear();
+        org.mockito.Mockito.when(blacklist.isSessionRevoked(org.mockito.ArgumentMatchers.any()))
+            .thenAnswer(a -> revokedSessions.contains(a.getArgument(0)));
+        org.mockito.Mockito.doAnswer(a -> { revokedSessions.add(a.getArgument(0)); return null; })
+            .when(blacklist).revokeSession(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
         org.mockito.Mockito.when(blacklist.isRevoked(org.mockito.ArgumentMatchers.anyString()))
             .thenAnswer(a -> revokedAccess.contains(a.getArgument(0)));
         org.mockito.Mockito.doAnswer(a -> { revokedAccess.add(a.getArgument(0)); return null; })
@@ -125,7 +131,6 @@ class AuthenticationTest {
         assertThat(tokens.findAll()).allSatisfy(t -> assertThat(t.getTokenHash()).hasSize(64).isNotEqualTo(raw));
         var refreshed = post("refresh", Map.of("refreshToken", raw));
         assertThat(refreshed.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(post("refresh", Map.of("refreshToken", raw)).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         String next = refreshed.getBody().path("data").path("refreshToken").asText();
         assertThat(next).isNotEqualTo(raw);
         var logoutHeaders = new HttpHeaders();
@@ -141,6 +146,26 @@ class AuthenticationTest {
         var token = tokens.findAll().getFirst(); token.setExpiresAt(Instant.now().minusSeconds(1)); tokens.save(token);
         assertThat(post("refresh", Map.of("refreshToken", raw)).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(post("refresh", Map.of("refreshToken", "a".repeat(43))).getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test void refreshReplayCommitsSessionRevocationAndPreservesOtherSessions() {
+        var first = login();
+        var other = login();
+        var rotated = post("refresh", Map.of("refreshToken", first.path("refreshToken").asText()));
+        assertThat(rotated.getStatusCode()).isEqualTo(HttpStatus.OK);
+        var next = rotated.getBody().path("data");
+        assertThat(post("refresh", Map.of("refreshToken", first.path("refreshToken").asText())).getStatusCode())
+            .isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(revokedSessions).hasSize(1);
+        assertThat(tokens.findAll().stream().filter(t -> revokedSessions.contains(t.getSessionId())).toList())
+            .hasSize(2).allMatch(com.zippy.auth.domain.entity.RefreshToken::isRevoked);
+        var headers = new HttpHeaders(); headers.setBearerAuth(next.path("accessToken").asText());
+        assertThat(http.exchange("/api/auth/me", HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class).getStatusCode())
+            .isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(post("refresh", Map.of("refreshToken", next.path("refreshToken").asText())).getStatusCode())
+            .isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(post("refresh", Map.of("refreshToken", other.path("refreshToken").asText())).getStatusCode())
+            .isEqualTo(HttpStatus.OK);
     }
     @Test void oversizedPasswordCannotAuthenticateByTruncation() {
         var response = post("login", Map.of("email", "test@gmail.com", "password", "a".repeat(73)));
