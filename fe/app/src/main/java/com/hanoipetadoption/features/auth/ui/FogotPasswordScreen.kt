@@ -84,6 +84,7 @@ fun ForgotPasswordScreen(
     onNavigateToResetPassword: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf<String?>(null) }
     var otpCode by remember { mutableStateOf("") }
     var isOtpSent by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -195,6 +196,9 @@ fun ForgotPasswordScreen(
                             }
                         }
                     },
+                    actions = {
+                        Spacer(modifier = Modifier.width(52.dp))
+                    },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent
                     )
@@ -278,11 +282,13 @@ fun ForgotPasswordScreen(
                                 value = email,
                                 onValueChange = {
                                     email = it
+                                    emailError = null
                                     errorMessage = null
                                 },
                                 label = "Email",
                                 placeholder = "Nhập email",
                                 leadingIcon = Icons.Default.Email,
+                                errorMessage = emailError,
                                 background = Color(0xFFF5F3F0)
                             )
 
@@ -340,13 +346,14 @@ fun ForgotPasswordScreen(
                                 contentColor = if (isOtpSent) DarkBrownText else Color.White,
                                 shadowColor = if (isOtpSent) Color.Transparent else PrimaryOrange,
                                 onClick = {
+                                    emailError = null
                                     errorMessage = null
                                     if (email.isBlank()) {
-                                        errorMessage = "Vui lòng nhập địa chỉ email"
+                                        emailError = "Vui lòng nhập địa chỉ email"
                                         return@PrimaryButton
                                     }
                                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                                        errorMessage = "Địa chỉ email không hợp lệ (VD: name@example.com)"
+                                        emailError = "Địa chỉ email không hợp lệ (VD: name@example.com)"
                                         return@PrimaryButton
                                     }
 

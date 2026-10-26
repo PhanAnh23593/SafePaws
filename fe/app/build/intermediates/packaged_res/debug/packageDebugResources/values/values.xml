@@ -8,5 +8,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">SafePaws</string>
+    <string name="default_web_client_id" translatable="false">149535612035-0a3ocim1h04tabh13fuoqm40j71aum73.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">149535612035</string>
+    <string name="google_api_key" translatable="false">AIzaSyCywBnwN4CItGn6-tIcCSnG0mFGTPOyoWs</string>
+    <string name="google_app_id" translatable="false">1:149535612035:android:6d2ecc6bee90de78868fb6</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCywBnwN4CItGn6-tIcCSnG0mFGTPOyoWs</string>
+    <string name="google_storage_bucket" translatable="false">safepaws-2adc4.firebasestorage.app</string>
+    <string name="project_id" translatable="false">safepaws-2adc4</string>
     <style name="Theme.SafePaws" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

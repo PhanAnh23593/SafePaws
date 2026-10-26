@@ -127,6 +127,12 @@ fun SignUpScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var agreeTerms by remember { mutableStateOf(true) }
 
+    var fullNameError by remember { mutableStateOf<String?>(null) }
+    var birthDateError by remember { mutableStateOf<String?>(null) }
+    var phoneNumberError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var confirmPasswordError by remember { mutableStateOf<String?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
 
@@ -161,40 +167,55 @@ fun SignUpScreen(
     val isConfirmMatch = confirmPassword.isNotEmpty() && confirmPassword == password
 
     fun handleSignUp() {
+        fullNameError = null
+        birthDateError = null
+        phoneNumberError = null
+        emailError = null
+        passwordError = null
+        confirmPasswordError = null
         errorMessage = null
 
+        var hasError = false
+
         if (fullName.isBlank()) {
-            errorMessage = "Vui lòng nhập họ và tên"
-            return
+            fullNameError = "Vui lòng nhập họ và tên"
+            hasError = true
+        }
+        if (birthDateStr.isBlank()) {
+            birthDateError = "Vui lòng chọn ngày sinh"
+            hasError = true
         }
         if (phoneNumber.isBlank()) {
-            errorMessage = "Vui lòng nhập số điện thoại"
-            return
+            phoneNumberError = "Vui lòng nhập số điện thoại"
+            hasError = true
         }
         if (email.isBlank()) {
-            errorMessage = "Vui lòng nhập địa chỉ email"
-            return
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            errorMessage = "Địa chỉ email không hợp lệ (VD: name@example.com)"
-            return
+            emailError = "Vui lòng nhập địa chỉ email"
+            hasError = true
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailError = "Địa chỉ email không hợp lệ (VD: name@example.com)"
+            hasError = true
         }
         if (password.isBlank()) {
-            errorMessage = "Vui lòng nhập mật khẩu"
-            return
+            passwordError = "Vui lòng nhập mật khẩu"
+            hasError = true
+        } else if (criteriaCount < 2) {
+            passwordError = "Mật khẩu quá yếu. Vui lòng đặt mật khẩu mạnh hơn!"
+            hasError = true
         }
-        if (criteriaCount < 2) {
-            errorMessage = "Mật khẩu quá yếu. Vui lòng đặt mật khẩu mạnh hơn!"
-            return
-        }
-        if (confirmPassword.isBlank() || password != confirmPassword) {
-            errorMessage = "Mật khẩu xác nhận không trùng khớp"
-            return
+        if (confirmPassword.isBlank()) {
+            confirmPasswordError = "Vui lòng nhập mật khẩu xác nhận"
+            hasError = true
+        } else if (password != confirmPassword) {
+            confirmPasswordError = "Mật khẩu xác nhận không trùng khớp"
+            hasError = true
         }
         if (!agreeTerms) {
             errorMessage = "Bạn cần đồng ý với Điều khoản và Chính sách của HPA"
-            return
+            hasError = true
         }
+
+        if (hasError) return
 
         isLoading = true
         coroutineScope.launch {
@@ -306,11 +327,13 @@ fun SignUpScreen(
                         value = fullName,
                         onValueChange = {
                             fullName = it
+                            fullNameError = null
                             errorMessage = null
                         },
                         label = "Họ và tên *",
                         placeholder = "Nguyễn Văn A",
                         leadingIconRes = R.drawable.profile,
+                        errorMessage = fullNameError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -327,9 +350,14 @@ fun SignUpScreen(
                         label = "Ngày sinh *",
                         placeholder = "01/01/2008",
                         leadingIconRes = R.drawable.birthday,
+                        errorMessage = birthDateError,
                         background = Color.White,
                         readOnly = true,
-                        onClick = { showDatePicker = true },
+                        onClick = {
+                            birthDateError = null
+                            errorMessage = null
+                            showDatePicker = true
+                        },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -340,11 +368,13 @@ fun SignUpScreen(
                         value = phoneNumber,
                         onValueChange = {
                             phoneNumber = it
+                            phoneNumberError = null
                             errorMessage = null
                         },
                         label = "Số điện thoại *",
                         placeholder = "0987 654 321",
                         leadingIconRes = R.drawable.phone,
+                        errorMessage = phoneNumberError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Next
@@ -359,11 +389,13 @@ fun SignUpScreen(
                         value = email,
                         onValueChange = {
                             email = it
+                            emailError = null
                             errorMessage = null
                         },
                         label = "Địa chỉ Email *",
                         placeholder = "email@address.com",
                         leadingIconRes = R.drawable.email,
+                        errorMessage = emailError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -420,12 +452,14 @@ fun SignUpScreen(
                             value = password,
                             onValueChange = {
                                 password = it
+                                passwordError = null
                                 errorMessage = null
                             },
                             label = null,
                             placeholder = "••••••••••••",
                             leadingIconRes = R.drawable.lock,
                             isPassword = true,
+                            errorMessage = passwordError,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Next
@@ -436,45 +470,67 @@ fun SignUpScreen(
                         if (password.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            // Thanh đo độ cứng mật khẩu 4 vạch
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "🐾 Độ cứng & an toàn: $strengthLabel",
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.Bold,
-                                        color = strengthColor,
-                                        fontSize = 12.sp
+                            // Thanh đo độ bảo mật mật khẩu & 4 tiêu chí
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Độ bảo mật:",
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            color = Color(0xFF584235),
+                                            fontSize = 13.sp
+                                        )
                                     )
-                                )
-                                Text(
-                                    text = "$criteriaCount/4 🐾",
-                                    style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = FontWeight.Bold,
-                                        color = strengthColor,
-                                        fontSize = 12.sp
+                                    Text(
+                                        text = strengthLabel,
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontWeight = FontWeight.Bold,
+                                            color = strengthColor,
+                                            fontSize = 13.sp
+                                        )
                                     )
-                                )
-                            }
+                                }
 
-                            Spacer(modifier = Modifier.height(6.dp))
+                                Spacer(modifier = Modifier.height(6.dp))
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                repeat(4) { index ->
-                                    val isFilled = index < criteriaCount
-                                    Box(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .height(6.dp)
-                                            .clip(RoundedCornerShape(3.dp))
-                                            .background(if (isFilled) strengthColor else Color(0xFFE0E0E0))
-                                    )
+                                // 4 vạch độ bền
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    repeat(4) { index ->
+                                        val isFilled = index < criteriaCount
+                                        Box(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .height(6.dp)
+                                                .clip(RoundedCornerShape(3.dp))
+                                                .background(if (isFilled) strengthColor else Color(0xFFE0E0E0))
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                // Danh sách 4 tiêu chí dạng 2 cột
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        CriteriaCheckItem("Ít nhất 8 ký tự", hasMinLength)
+                                        Spacer(modifier = Modifier.height(6.dp))
+                                        CriteriaCheckItem("Ít nhất 1 chữ số", hasDigit)
+                                    }
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        CriteriaCheckItem("Chữ hoa & chữ thường", hasUpperAndLower)
+                                        Spacer(modifier = Modifier.height(6.dp))
+                                        CriteriaCheckItem("Ký tự đặc biệt (@, #...)", hasSpecialChar)
+                                    }
                                 }
                             }
                         }
@@ -487,12 +543,14 @@ fun SignUpScreen(
                         value = confirmPassword,
                         onValueChange = {
                             confirmPassword = it
+                            confirmPasswordError = null
                             errorMessage = null
                         },
                         label = "Xác nhận mật khẩu *",
                         placeholder = "••••••••••••",
                         leadingIconRes = R.drawable.shield_check,
                         isPassword = true,
+                        errorMessage = confirmPasswordError,
                         trailingIconComposable = {
                             if (isConfirmMatch) {
                                 Icon(
@@ -673,6 +731,8 @@ fun SignUpScreen(
                     selectedMonth = m
                     selectedYear = y
                     birthDateStr = String.format(java.util.Locale.getDefault(), "%02d/%02d/%04d", d, m, y)
+                    birthDateError = null
+                    errorMessage = null
                     showDatePicker = false
                 }
             )
@@ -1231,6 +1291,30 @@ private fun WheelColumn(
                 )
             }
         }
+    }
+}
+
+/**
+ * Mẫu Item Checkmark Tiêu chí Mật khẩu
+ */
+@Composable
+private fun CriteriaCheckItem(text: String, isMet: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Default.CheckCircle,
+            contentDescription = null,
+            tint = if (isMet) DarkGreen else Color(0xFFB0A8A0),
+            modifier = Modifier.size(16.dp)
+        )
+        Spacer(modifier = Modifier.width(6.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = if (isMet) DarkGreen else Color(0xFF786B60),
+                fontSize = 11.5.sp,
+                fontWeight = if (isMet) FontWeight.SemiBold else FontWeight.Normal
+            )
+        )
     }
 }
 

@@ -58,6 +58,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.hanoipetadoption.R
 import com.hanoipetadoption.ui.components.CustomTextField
 import com.hanoipetadoption.ui.components.PrimaryButton
@@ -135,6 +144,64 @@ fun LoginScreen(
             } else {
                 // Hiện thông báo sai tài khoản/mật khẩu theo yêu cầu
                 errorMessage = "Tài khoản hoặc mật khẩu không chính xác"
+            }
+        }
+    }
+
+    // Hàm xử lý Đăng nhập bằng Google qua Credential Manager & Firebase
+    fun handleGoogleLogin() {
+        errorMessage = null
+        identifierError = null
+        passwordError = null
+        isLoading = true
+
+        coroutineScope.launch {
+            try {
+                val credentialManager = CredentialManager.create(context)
+                val googleIdOption = GetGoogleIdOption.Builder()
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId("149535612035-0a3ocim1h04tabh13fuoqm40j71aum73.apps.googleusercontent.com")
+                    .setAutoSelectEnabled(false)
+                    .build()
+
+                val request = GetCredentialRequest.Builder()
+                    .addCredentialOption(googleIdOption)
+                    .build()
+
+                val result = credentialManager.getCredential(
+                    context = context,
+                    request = request
+                )
+
+                val credential = result.credential
+                if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                    val idToken = googleIdTokenCredential.idToken
+
+                    val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(firebaseCredential)
+                        .addOnCompleteListener { task ->
+                            isLoading = false
+                            if (task.isSuccessful) {
+                                UserPreferences.setLoggedIn(context, true)
+                                onLoginSuccess()
+                            } else {
+                                errorMessage = task.exception?.localizedMessage ?: "Đăng nhập Google thất bại"
+                            }
+                        }
+                } else {
+                    isLoading = false
+                    errorMessage = "Loại thông tin xác thực Google không hợp lệ"
+                }
+            } catch (e: GetCredentialCancellationException) {
+                isLoading = false
+                // Người dùng hủy thao tác đăng nhập Google
+            } catch (e: GetCredentialException) {
+                isLoading = false
+                errorMessage = "Đăng nhập bằng Google thất bại: ${e.message}"
+            } catch (e: Exception) {
+                isLoading = false
+                errorMessage = "Đã xảy ra lỗi: ${e.message}"
             }
         }
     }
@@ -425,7 +492,10 @@ fun LoginScreen(
 
                     // Nút Đăng nhập bằng Google
                     Surface(
-                        onClick = onGoogleLoginClick,
+                        onClick = {
+                            onGoogleLoginClick()
+                            handleGoogleLogin()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),

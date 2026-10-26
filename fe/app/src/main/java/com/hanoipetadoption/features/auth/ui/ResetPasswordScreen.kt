@@ -30,6 +30,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ErrorOutline
@@ -92,6 +93,8 @@ fun ResetPasswordScreen(
 ) {
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var newPasswordError by remember { mutableStateOf<String?>(null) }
+    var confirmPasswordError by remember { mutableStateOf<String?>(null) }
     var logoutOtherDevices by remember { mutableStateOf(true) }
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -131,24 +134,28 @@ fun ResetPasswordScreen(
     val isConfirmMismatch = confirmPassword.isNotEmpty() && confirmPassword != newPassword
 
     fun handleResetPassword() {
+        newPasswordError = null
+        confirmPasswordError = null
         errorMessage = null
 
+        var hasError = false
         if (newPassword.isBlank()) {
-            errorMessage = "Vui lòng nhập mật khẩu mới"
-            return
+            newPasswordError = "Vui lòng nhập mật khẩu mới"
+            hasError = true
+        } else if (criteriaCount < 2) {
+            newPasswordError = "Mật khẩu chưa đủ độ an toàn. Vui lòng hoàn thành thêm tiêu chí!"
+            hasError = true
         }
-        if (criteriaCount < 3) {
-            errorMessage = "Mật khẩu chưa đủ độ an toàn. Vui lòng hoàn thành thêm tiêu chí!"
-            return
-        }
+
         if (confirmPassword.isBlank()) {
-            errorMessage = "Vui lòng xác nhận lại mật khẩu mới"
-            return
+            confirmPasswordError = "Vui lòng xác nhận lại mật khẩu mới"
+            hasError = true
+        } else if (newPassword != confirmPassword) {
+            confirmPasswordError = "Mật khẩu xác nhận không trùng khớp!"
+            hasError = true
         }
-        if (newPassword != confirmPassword) {
-            errorMessage = "Mật khẩu xác nhận không trùng khớp!"
-            return
-        }
+
+        if (hasError) return
 
         isLoading = true
         coroutineScope.launch {
@@ -207,7 +214,7 @@ fun ResetPasswordScreen(
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    text = "HPA SECURITY",
+                                    text = "HPA SUPPORT",
                                     style = MaterialTheme.typography.labelMedium.copy(
                                         fontWeight = FontWeight.Bold,
                                         color = DarkBrownText
@@ -235,6 +242,9 @@ fun ResetPasswordScreen(
                                 )
                             }
                         }
+                    },
+                    actions = {
+                        Spacer(modifier = Modifier.width(52.dp))
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent
@@ -362,12 +372,14 @@ fun ResetPasswordScreen(
                         value = newPassword,
                         onValueChange = {
                             newPassword = it
+                            newPasswordError = null
                             errorMessage = null
                         },
                         label = "Mật khẩu mới *",
                         placeholder = "Nhập mật khẩu mới",
                         leadingIcon = Icons.Default.Lock,
                         isPassword = true,
+                        errorMessage = newPasswordError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Next
@@ -448,12 +460,14 @@ fun ResetPasswordScreen(
                         value = confirmPassword,
                         onValueChange = {
                             confirmPassword = it
+                            confirmPasswordError = null
                             errorMessage = null
                         },
                         label = "Xác nhận mật khẩu mới *",
                         placeholder = "••••••••••••",
                         leadingIcon = Icons.Default.Lock,
                         isPassword = true,
+                        errorMessage = confirmPasswordError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Done
@@ -588,7 +602,7 @@ fun ResetPasswordScreen(
                     // Nút Đăng nhập / Cập nhật
                     PrimaryButton(
                         leadingIcon = R.drawable.paw_print,
-                        text = "Cập nhật & Đăng nhập ngay",
+                        text = "Cập nhật",
                         containerColor = PrimaryOrange,
                         contentColor = Color.White,
                         shadowColor = PrimaryOrange,
@@ -618,34 +632,46 @@ fun ResetPasswordScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
 
-                // Banner hỗ trợ cố định chân trang
-                Column(
+                // Box gọi hỗ trợ cố định ở đáy (cách đáy 12.dp)
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(bottom = 12.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color.White)
+                        .padding(12.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Surface(
-                        shape = RoundedCornerShape(50.dp),
-                        color = Color(0xFFEAE8E5).copy(alpha = 0.7f)
+                    // Dùng Row để sắp xếp Icon và Text nằm ngang hàng nhau
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = "Trợ giúp",
+                            tint = PrimaryOrange,
+                            modifier = Modifier.size(24.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(6.dp)) // Tạo khoảng cách nhỏ giữa icon và chữ
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.paw_print),
-                                contentDescription = null,
-                                tint = PrimaryOrange,
-                                modifier = Modifier.size(15.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = "Cần hỗ trợ trực tiếp? Đội ngũ HPA: 098.852.1994",
+                                text = "Cần trợ giúp trực tiếp? Liên hệ Đội cứu trợ HPA",
                                 style = MaterialTheme.typography.labelSmall.copy(
-                                    color = Color(0xFF584235),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium
+                                    color = DarkBrownText,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 12.sp
+                                )
+                            )
+                            Text(
+                                text = "0343107742",
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    color = PrimaryOrange,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 12.sp
                                 )
                             )
                         }

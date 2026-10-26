@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "149535612035",
+    "project_id": "safepaws-2adc4",
+    "storage_bucket": "safepaws-2adc4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149535612035:android:6d2ecc6bee90de78868fb6",
+        "android_client_info": {
+          "package_name": "com.hanoipetadoption"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149535612035-s9d7vur1tv9sim09atd4877decjud1uu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hanoipetadoption",
+            "certificate_hash": "4720cf2ab9a9397b1322980a25a8490a45658036"
+          }
+        },
+        {
+          "client_id": "149535612035-0a3ocim1h04tabh13fuoqm40j71aum73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCywBnwN4CItGn6-tIcCSnG0mFGTPOyoWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149535612035-0a3ocim1h04tabh13fuoqm40j71aum73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
